@@ -41,6 +41,7 @@
                 Text="Book suggestions" />
             <controls:DubbleTapButton
                 Command="{Binding ButtonPressedCommand}"
+                Clicked="OnDubbleTapButtonClicked"
                 HorizontalOptions="EndAndExpand"
                 VerticalOptions="Start" />
         </StackLayout>

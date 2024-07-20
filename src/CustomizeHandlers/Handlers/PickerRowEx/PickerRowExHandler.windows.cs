@@ -21,6 +21,13 @@ public partial class PickerRowExHandler : PickerHandler
     {
         base.DisconnectHandler(platformView);
     }
+    public void SetPadding(Thickness padding)
+    {
+    }
+    public void SetBorderColor(Color color)
+    {
+
+    }
 }
 
 public class PickerComboBox : ComboBox

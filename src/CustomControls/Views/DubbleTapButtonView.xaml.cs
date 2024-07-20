@@ -11,4 +11,9 @@ public partial class DubbleTapButtonView : ContentPage
         InitializeComponent();
         BindingContext = new DoubleTapViewModel();
     }
+
+    private void OnDubbleTapButtonClicked(object sender, EventArgs e)
+    {
+        Application.Current.MainPage.DisplayAlert("Success", "You clicked the button", "Ok");
+    }
 }

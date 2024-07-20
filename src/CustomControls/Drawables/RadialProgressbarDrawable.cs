@@ -10,13 +10,14 @@ public class RadialProgressbarDrawable : IDrawable
 
     public void Draw(ICanvas canvas, RectF dirtyRect)
     {
+        var margin = 5; 
         var isClockWise = true;
         var progress = _radialProgressBarControl.Progress;
         var isFullCircle = progress == 100;
         var progressAngle = progress / 100;
         var centerX = dirtyRect.Width / 2;
         var centerY = dirtyRect.Height / 2;
-        var radius = (dirtyRect.Width / 2);
+        var radius = (dirtyRect.Width / 2) - margin;
 
         // Explaination for coordinators.
         // Start 0 is at 3 o'clock. We travel anticlockwise. So 12 o'clock is 90 degrees.
@@ -24,7 +25,7 @@ public class RadialProgressbarDrawable : IDrawable
         // The Clockwise boolean tells if we travel clockwise or anticlockwise. In this case we travel clockwise from startAngle to endAngle and by this we get a slice that is what we want.
         // If we pick anticlockvwise, we get the rest of the circle, and the slice not highlighted.
         var startAngle = 90f;
-        var endAngle = startAngle - (float)Math.Round(progressAngle * 360, 1);
+        var endAngle = startAngle - ((float)progressAngle * 360f);
 
         canvas.SaveState();
 
@@ -51,8 +52,9 @@ public class RadialProgressbarDrawable : IDrawable
             {
                 var path = new PathF();
                 path.MoveTo(centerX, centerY);
-                path.AddArc(centerX - radius, centerY - radius, radius * 2, radius * 2, startAngle, endAngle, isClockWise);
-
+                // We need to add an adjustment of 0.5 due to how addarc calculate arcs. To make it aligned with the other circles. 
+                path.AddArc(centerX - radius + 0.5f, centerY - radius + 0.5f, centerX + radius - 0.5f, centerY + radius - 0.5f, startAngle, endAngle, isClockWise);
+                path.LineTo(centerX, centerY);
                 canvas.FillColor = progress < 95 ? new Color(235, 243, 231) : new Color(221, 52, 53);
                 canvas.FillPath(path);
 

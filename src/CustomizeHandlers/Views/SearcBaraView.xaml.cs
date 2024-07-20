@@ -1,7 +1,6 @@
 using CustomizeHandlers.Resources.Localization;
 
 namespace CustomizeHandlers.Views;
-
 public partial class SearcBarView : ContentPage
 {
     private readonly Color[] colors;
@@ -24,12 +23,18 @@ public partial class SearcBarView : ContentPage
 
     private void RadioButtons_LanguageChanged(object sender, string e)
     {
-        MySearchBar.CancelButtonText = AppResources.CancelButtonText;
+        if (MySearchBar != null)
+        {
+            MySearchBar.CancelButtonText = AppResources.CancelButtonText;
+        }
     }
 
     private void SearcBarView_Unloaded(object sender, EventArgs e)
     {
-        MySearchBar.Handler?.DisconnectHandler();
+        if (MySearchBar?.Handler != null)
+        {
+            MySearchBar.Handler.DisconnectHandler();
+        }
     }
 
     private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
@@ -40,14 +45,14 @@ public partial class SearcBarView : ContentPage
 
     private void OnToggleThemeClicked(object sender, EventArgs e)
     {
-        AppTheme currentTheme = Application.Current.RequestedTheme;
-        if (Application.Current.RequestedTheme == AppTheme.Unspecified)
-        {
-        }
-        if (Application.Current.UserAppTheme == AppTheme.Unspecified)
-            Application.Current.UserAppTheme = Application.Current.RequestedTheme;
+        AppTheme currentTheme = Application.Current?.RequestedTheme ?? AppTheme.Unspecified;
 
-        if (Application.Current.UserAppTheme == AppTheme.Dark)
+        if (Application.Current?.UserAppTheme == AppTheme.Unspecified)
+        {
+            Application.Current.UserAppTheme = currentTheme;
+        }
+
+        if (Application.Current?.UserAppTheme == AppTheme.Dark)
         {
             Application.Current.UserAppTheme = AppTheme.Light;
         }
@@ -61,7 +66,10 @@ public partial class SearcBarView : ContentPage
     {
         var colorIndex = timesPressedButton % 5;
         var color = colors[colorIndex];
-        MySearchBar.TextColor = color;
+        if (MySearchBar != null)
+        {
+            MySearchBar.TextColor = color;
+        }
 
         timesPressedButton++;
     }
