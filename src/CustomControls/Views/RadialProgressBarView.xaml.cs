@@ -9,27 +9,30 @@ public partial class RadialProgressBarView : ContentPage
 
     public RadialProgressBarView()
     {
-        InitializeComponent();
         BindingContext = this;
+
+        System.Diagnostics.Debug.WriteLine($"======================== {DateTime.Now.Minute}:{DateTime.Now.Second}.{DateTime.Now.Millisecond} | Before Initialize Component");
+        InitializeComponent();
+        System.Diagnostics.Debug.WriteLine($"======================== {DateTime.Now.Minute}:{DateTime.Now.Second}.{DateTime.Now.Millisecond} | After Initialize Component");
     }
 
     private async void ProgressButton_Clicked(object sender, EventArgs e)
     {
 
-        var acquired = await _mutex.WaitAsync(0); 
-        if (!acquired)
-            return; 
+        var acquired = await _mutex.WaitAsync(0);
+        if(!acquired)
+            return;
 
         try
         {
-            RadialProgressBar.Progress += 5;
+            // RadialProgressBar.Progress += 5;
         }
         finally
         {
-            _mutex.Release(); 
+            _mutex.Release();
         }
 
-        await Task.Delay(100); 
+        await Task.Delay(100);
     }
 
     private void TimerButton_Clicked(object sender, EventArgs e)
@@ -40,27 +43,27 @@ public partial class RadialProgressBarView : ContentPage
     private async void InitializeTimer()
     {
         // Prevent multiple clicks
-        var acquired = await _mutex.WaitAsync(0); 
-        if (!acquired)
+        var acquired = await _mutex.WaitAsync(0);
+        if(!acquired)
             return;
 
-        RadialProgressBar.Progress = 0;
-        timer = new System.Timers.Timer(500);
-        timer.Elapsed += new ElapsedEventHandler(RadialProgressBar_Progress);
-        timer.Start();
+        //RadialProgressBar.Progress = 0;
+        //timer = new System.Timers.Timer(500);
+        //timer.Elapsed += new ElapsedEventHandler(RadialProgressBar_Progress);
+        //timer.Start();
     }
 
     private void RadialProgressBar_Progress(object sender, ElapsedEventArgs e)
     {
         Dispatcher.Dispatch(() =>
         {
-            RadialProgressBar.Progress += 5;
+            //RadialProgressBar.Progress += 5;
 
-            if (RadialProgressBar.Progress == 100)
-            {
-                timer.Stop();
-                _mutex.Release();
-            }
+            //if (RadialProgressBar.Progress == 100)
+            //{
+            //    timer.Stop();
+            //    _mutex.Release();
+            //}
         });
     }
 
@@ -71,25 +74,25 @@ public partial class RadialProgressBarView : ContentPage
     /// <param name="e"></param>
     private async void AnimateButton_Clicked(object sender, EventArgs e)
     {
-        var acquired = await _mutex.WaitAsync(0); 
-        if (!acquired)
-            return; 
+        var acquired = await _mutex.WaitAsync(0);
+        if(!acquired)
+            return;
 
         try
         {
-            var firstAnimation = new Animation(v => RadialProgressBar.Progress = v, 0, 90, Easing.Linear);
-            var secondAnimation = new Animation(v => RadialProgressBar.Progress = v, 90, 100, Easing.Linear);
+            //var firstAnimation = new Animation(v => RadialProgressBar.Progress = v, 0, 90, Easing.Linear);
+            //var secondAnimation = new Animation(v => RadialProgressBar.Progress = v, 90, 100, Easing.Linear);
 
-            firstAnimation.Commit(this, "FirstAnimation", 16, 2000, Easing.Linear, (v, c) =>
-            {
-                secondAnimation.Commit(this, "SecondAnimation", 16, 2000, Easing.Linear, (v2, c2) =>
-                {
-                }, () => false);
-            }, () => false);
+            //firstAnimation.Commit(this, "FirstAnimation", 16, 2000, Easing.Linear, (v, c) =>
+            //{
+            //    secondAnimation.Commit(this, "SecondAnimation", 16, 2000, Easing.Linear, (v2, c2) =>
+            //    {
+            //    }, () => false);
+            //}, () => false);
         }
         finally
         {
-            _mutex.Release(); 
+            _mutex.Release();
         }
     }
 }
